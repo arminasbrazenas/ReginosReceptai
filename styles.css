@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather&family=Open+Sans&display=swap");
+
+body {
+  font-family: "Merriweather", serif;
+  color: #514343;
+}
+
+.navbar {
+  background-color: #ede9e4;
+}
+
+.nav-link {
+  font-family: "Open Sans", sans-serif;
+  text-transform: uppercase;
+  color: #514343;
+}
+
+.navbar-brand {
+  transition: color 200ms ease-in-out;
+}
+
+.nav-link:hover,
+.navbar-brand:hover {
+  color: #a19a98;
+}
+
+.fa-star {
+  color: #514343;
+}
+
+.checked {
+  color: #dfbb62;
+}
+
+.card {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 200ms ease-in-out;
+}
+
+.card:hover {
+  opacity: 0.8;
+}
+
+.card-body {
+  background-color: #f8f5f1;
+  border-bottom: 1px solid #ebe1d6;
+}
+
+.card-title {
+  color: #514343;
+}
+
+.container-md {
+  max-width: 1220px;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 15vw;
+  min-height: 180px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.recipe-img {
+  max-height: 25vw;
+  min-height: 240px;
+  width: 100%;
+  object-fit: cover;
+}
