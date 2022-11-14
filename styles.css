@@ -17,6 +17,7 @@ body {
 }
 
 .navbar-brand {
+  color: #514343;
   transition: color 200ms ease-in-out;
 }
 
