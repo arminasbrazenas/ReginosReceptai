@@ -6,6 +6,11 @@ body {
   color: #514343;
 }
 
+option {
+  font-family: inherit;
+  color: inherit;
+}
+
 .navbar {
   background-color: #ede9e4;
 }
@@ -70,4 +75,9 @@ body {
   min-height: 240px;
   width: 100%;
   object-fit: cover;
+}
+
+.sort-select {
+  min-width: 240px;
+  color: #514343;
 }
