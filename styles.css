@@ -1,34 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Merriweather&family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans&display=swap");
 
-body {
-  font-family: "Merriweather", serif;
-  color: #514343;
+:root {
+  --primary-font: "Merriweather", serif;
+  --secondary-font: "Open Sans", sans-serif;
+  --primary-font-color: #514343;
+  --primary-font-color-hover: #a19a98;
+  --secondary-font-color: #3b2222;
+  --primary-background-color: #ede9e4;
+  --light-background-color: #f8f5f1;
+  --light-border: 1px solid #ebe1d6;
+  --font-weight-bold: 700;
 }
 
-option {
-  font-family: inherit;
-  color: inherit;
+body {
+  font-family: var(--secondary-font);
+  color: var(--secondary-font-color);
 }
 
 .navbar {
-  background-color: #ede9e4;
-}
-
-.nav-link {
-  font-family: "Open Sans", sans-serif;
-  text-transform: uppercase;
-  color: #514343;
+  background-color: var(--primary-background-color);
+  color: var(--primary-font-color);
 }
 
 .navbar-brand {
-  color: #514343;
+  font-family: var(--primary-font);
+  color: inherit;
   transition: color 200ms ease-in-out;
+}
+
+.nav-link {
+  text-transform: uppercase;
+  color: inherit;
 }
 
 .nav-link:hover,
 .navbar-brand:hover {
-  color: #a19a98;
+  color: var(--primary-font-color-hover);
+}
+
+.page-header {
+  font-family: var(--primary-font);
+  color: var(--primary-font-color);
 }
 
 .fa-star {
@@ -50,12 +62,23 @@ option {
 }
 
 .card-body {
-  background-color: #f8f5f1;
-  border-bottom: 1px solid #ebe1d6;
+  background-color: var(--light-background-color);
+  border-bottom: var(--light-border);
 }
 
 .card-title {
-  color: #514343;
+  color: var(--primary-font-color);
+  font-family: var(--primary-font);
+}
+
+.page-section {
+  font-family: var(--primary-font);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-font-color);
+}
+
+.ingredient {
+  color: var(--secondary-font-color);
 }
 
 .container-md {
@@ -79,5 +102,11 @@ option {
 
 .sort-select {
   min-width: 240px;
-  color: #514343;
+  color: var(--primary-font-color);
+  font-family: var(--secondary-font);
+}
+
+option {
+  font-family: inherit;
+  color: inherit;
 }
