@@ -1,19 +1,18 @@
-//
-// Created by Augustinas on 2022-11-26.
-//
 #include "HTML_code_doubly_linked_list.h"
+
+HTML_CODE *_HTML_START_ = NULL;
+HTML_CODE *_HTML_CURRENT_ = NULL;
 
 void generate_html_file(char *file_name)
 {
-    if(___HTML_START___ != NULL)
+    if(_HTML_START_ != NULL)
     {
         FILE *file = fopen(file_name, "w");
-        if(file == NULL)
-        {
+        if(file == NULL) {
             printf("Failed to open the output file\n");
             return;
         }
-        HTML_CODE *currentLine = ___HTML_START___;
+        HTML_CODE *currentLine = _HTML_START_;
         while(currentLine != NULL)
         {
             fprintf(file, "%s\n", (*currentLine).text);
@@ -42,7 +41,7 @@ HTML_CODE *create_HTML_CODE(char *text, HTML_CODE *previous, HTML_CODE *next)
         (*previous).next = new_elem;
     if(next != NULL)
         (*next).previous = new_elem;
-    ___HTML_CURRENT___ = new_elem;
+    _HTML_CURRENT_ = new_elem;
     return new_elem;
 }
 
@@ -80,39 +79,37 @@ void insert_tag(char *name, char *param)
     strcat(end_text, name);
     strcat(end_text, ">");
 
-    if(___HTML_START___ != NULL)
+    if(_HTML_START_ != NULL)
     {
-        HTML_CODE *field_start = create_HTML_CODE(start_text, ___HTML_CURRENT___, (*___HTML_CURRENT___).next);
-        HTML_CODE *field_end = create_HTML_CODE(end_text, ___HTML_CURRENT___, (*___HTML_CURRENT___).next);
-        ___HTML_CURRENT___ = (*___HTML_CURRENT___).previous;
+        HTML_CODE *field_start = create_HTML_CODE(start_text, _HTML_CURRENT_, (*_HTML_CURRENT_).next);
+        HTML_CODE *field_end = create_HTML_CODE(end_text, _HTML_CURRENT_, (*_HTML_CURRENT_).next);
+        _HTML_CURRENT_ = (*_HTML_CURRENT_).previous;
     }
     else
     {
         HTML_CODE *field_start = create_HTML_CODE(start_text, NULL, NULL);
-        HTML_CODE *field_end = create_HTML_CODE(end_text, ___HTML_CURRENT___, (*___HTML_CURRENT___).next);
-        ___HTML_CURRENT___ = (*___HTML_CURRENT___).previous;
-        ___HTML_START___ = field_start;
-        ___HTML_END___ = field_end;
+        HTML_CODE *field_end = create_HTML_CODE(end_text, _HTML_CURRENT_, (*_HTML_CURRENT_).next);
+        _HTML_CURRENT_ = (*_HTML_CURRENT_).previous;
+        _HTML_START_ = field_start;
     }
 }
 
 void insert_text(char *text)
 {
-    if(___HTML_START___ != NULL)
+    if(_HTML_START_ != NULL)
     {
-        HTML_CODE *field_start = create_HTML_CODE(text, ___HTML_END___, NULL);
+        HTML_CODE *field_start = create_HTML_CODE(text, _HTML_CURRENT_, (*_HTML_CURRENT_).next);
     }
     else
     {
         HTML_CODE *line = create_HTML_CODE(text, NULL, NULL);
-        ___HTML_START___ = line;
-        ___HTML_END___ = line;
+        _HTML_START_ = line;
     }
 }
 
 void exit_field(int count)
 {
     for(int i = 0; i < count; i++) {
-        ___HTML_CURRENT___ = (*___HTML_CURRENT___).next;
+        _HTML_CURRENT_ = (*_HTML_CURRENT_).next;
     }
 }
