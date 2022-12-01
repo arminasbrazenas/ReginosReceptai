@@ -1,7 +1,5 @@
-//
-// Created by Augustinas on 2022-11-26.
-//
-#pragma once
+#ifndef HTML_CODE_DOUBLE_LINKED_LIST
+#define HTML_CODE_DOUBLE_LINKED_LIST
 
 #include <stdio.h>
 #include <string.h>
@@ -14,8 +12,8 @@ typedef struct HTML_CODE
     struct HTML_CODE *next;
 } HTML_CODE;
 
-HTML_CODE *___HTML_START___ = NULL;
-HTML_CODE *___HTML_CURRENT___ = NULL;
+extern HTML_CODE *_HTML_START_;
+extern HTML_CODE *_HTML_CURRENT_;
 
 void generate_html_file(char *file_name);
 
@@ -27,3 +25,4 @@ void insert_text(char *text);
 
 void exit_field(int count);
 
+#endif
