@@ -16,6 +16,7 @@ int main()
     char *file_name = "output.txt";
     generate_html_file(file_name);
     printf("File printed\n");
+    delete_code();
     return 0;
 }
 
