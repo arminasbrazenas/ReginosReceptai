@@ -96,13 +96,15 @@ void insert_tag(char *name, char *param)
 
 void insert_text(char *text)
 {
+    char *dynamic_text = malloc(sizeof(char) * strlen(text));
+    strcpy(dynamic_text, text);
     if(_HTML_START_ != NULL)
     {
-        HTML_CODE *field_start = create_HTML_CODE(text, _HTML_CURRENT_, (*_HTML_CURRENT_).next);
+        HTML_CODE *field_start = create_HTML_CODE(dynamic_text, _HTML_CURRENT_, (*_HTML_CURRENT_).next);
     }
     else
     {
-        HTML_CODE *line = create_HTML_CODE(text, NULL, NULL);
+        HTML_CODE *line = create_HTML_CODE(dynamic_text, NULL, NULL);
         _HTML_START_ = line;
     }
 }
@@ -112,4 +114,17 @@ void exit_field(int count)
     for(int i = 0; i < count; i++) {
         _HTML_CURRENT_ = (*_HTML_CURRENT_).next;
     }
+}
+
+void delete_code()
+{
+    HTML_CODE *next_node;
+    while(_HTML_START_ != NULL)
+    {
+        next_node = _HTML_START_->next;
+        free(_HTML_START_->text);
+        free(_HTML_START_);
+        _HTML_START_ = next_node;
+    }
+    _HTML_CURRENT_ = NULL;
 }
