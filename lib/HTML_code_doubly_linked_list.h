@@ -12,9 +12,6 @@ typedef struct HTML_CODE
     struct HTML_CODE *next;
 } HTML_CODE;
 
-extern HTML_CODE *_HTML_START_;
-extern HTML_CODE *_HTML_CURRENT_;
-
 void generate_html_file(char *file_name);
 
 HTML_CODE *create_HTML_CODE(char *text, HTML_CODE *previous, HTML_CODE *next);
@@ -24,5 +21,7 @@ void insert_tag(char *name, char *param);
 void insert_text(char *text);
 
 void exit_field(int count);
+
+void delete_code();
 
 #endif
