@@ -18,7 +18,7 @@ int main()
     char *file_name = "output.html";
     generate_html_file(file_name);
     printf("File printed\n");
-    cleanup();
+    free_html_code();
     return 0;
 }
 

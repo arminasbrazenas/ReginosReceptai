@@ -23,6 +23,6 @@ bool insert_text(char *text);
 
 void exit_html_field(int count);
 
-void cleanup();
+void free_html_code();
 
 #endif

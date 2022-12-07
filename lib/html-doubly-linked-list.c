@@ -1,8 +1,8 @@
 #include "html-doubly-linked-list.h"
 #include "utilities.h"
 
-static HTML *g_html_start = NULL;
-static HTML *g_html_current = NULL;
+HTML *g_html_start = NULL;
+HTML *g_html_current = NULL;
 
 bool generate_html_file(char *file_name)
 {
@@ -15,11 +15,11 @@ bool generate_html_file(char *file_name)
             return false;
         }
 
-        HTML *html_current = g_html_start;
-        while (html_current != NULL)
+        HTML *current = g_html_start;
+        while (current != NULL)
         {
-            fprintf(file, "%s\n", html_current->text);
-            html_current = html_current->next;
+            fprintf(file, "%s\n", current->text);
+            current = current->next;
         }
         fclose(file);
     }
@@ -140,7 +140,7 @@ void exit_html_field(int count)
     }
 }
 
-void cleanup()
+void free_html_code()
 {
     HTML *next_node;
     while (g_html_start != NULL)
