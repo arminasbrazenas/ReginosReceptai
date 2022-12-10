@@ -3,4 +3,4 @@ project(lib)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(c_stuff main.c html-doubly-linked-list.h html-doubly-linked-list.c utilities.h utilities.c)
+add_executable(c_stuff main.c html-doubly-linked-list.c utilities.h)
