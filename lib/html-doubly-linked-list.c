@@ -136,6 +136,11 @@ void exit_html_field(int count)
 {
     for (int i = 0; i < count; ++i)
     {
+        if (g_html_current == NULL)
+        {
+            return;
+        }
+
         g_html_current = g_html_current->next;
     }
 }
