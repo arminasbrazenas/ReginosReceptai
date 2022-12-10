@@ -1,22 +1,24 @@
-#include "HTML_code_doubly_linked_list.h"
+#define DEBUG
+
+#include "html-doubly-linked-list.h"
 
 int main()
 {
     char *name = "html";
-    insert_tag(name, NULL);
+    insert_html_tag(name, NULL);
     char *name1 = "head";
-    insert_tag(name1, "Harambe is good");
-    char *value = "Reginos receptai";
+    insert_html_tag(name1, "Harambe is good");
+    char *value = "Laba diena visiems";
     insert_text(value);
-    exit_field(1);
+    exit_html_field(1);
     char *name2 = "body";
-    insert_tag(name2, NULL);
+    insert_html_tag(name2, NULL);
 
     printf("Tag inserted\n");
-    char *file_name = "output.txt";
+    char *file_name = "output.html";
     generate_html_file(file_name);
     printf("File printed\n");
-    delete_code();
+    free_html_code();
     return 0;
 }
 
