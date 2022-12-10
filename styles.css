@@ -43,6 +43,11 @@ body {
   color: var(--primary-font-color);
 }
 
+.site-logo {
+  float: right;
+  margin-right: 10px;
+}
+
 .fa-star {
   color: #514343;
 }
