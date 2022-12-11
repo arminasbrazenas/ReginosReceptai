@@ -1,4 +1,5 @@
 #include "html-generator.h"
+#include <errno.h>
 
 HTML *g_html_start = NULL;
 HTML *g_html_current = NULL;
