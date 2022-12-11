@@ -1,5 +1,5 @@
-#ifndef HTML_DOUBLY_LINKED_LIST
-#define HTML_DOUBLY_LINKED_LIST
+#ifndef HTML_GENERATOR
+#define HTML_GENERATOR
 
 #include <stdio.h>
 #include <string.h>
@@ -15,8 +15,8 @@ typedef struct HTML
 
 int generate_html_file(char *file_name);
 int insert_html_tag(char *tag, char *attributes);
-int insert_text(char *text);
+int insert_html_text(char *text);
 void exit_html_field(int count);
-void free_html_code();
+void delete_html_code();
 
 #endif

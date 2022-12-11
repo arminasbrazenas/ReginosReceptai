@@ -1,4 +1,4 @@
-#include "html-doubly-linked-list.h"
+#include "html-generator.h"
 
 HTML *g_html_start = NULL;
 HTML *g_html_current = NULL;
@@ -114,7 +114,7 @@ int insert_html_tag(char *tag, char *attributes)
 /// Inserts text to HTML code.
 /// \param text Text to insert.
 /// \return 0 on success, otherwise error code.
-int insert_text(char *text)
+int insert_html_text(char *text)
 {
     if (text == NULL)
     {
@@ -165,7 +165,7 @@ void exit_html_field(int count)
 }
 
 /// Frees memory used by HTML code.
-void free_html_code()
+void delete_html_code()
 {
     HTML *next_node;
     while (g_html_start != NULL)

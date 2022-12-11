@@ -1,83 +1,79 @@
-#include "html-doubly-linked-list.h"
+#include "html-generator.h"
 
+// This is an example program, which generates HTML code for header.
 int main()
 {
-    // This program outputs a text file containing html code which creates a title for the page.
-
-    /* Generates first html tag with parameters (lang=en):
+    /* Generates first "html" tag with parameters (lang=en):
         <html lang=en>
         </html>
     */ 
     char *name = "html";
-    insert_tag(name, "lang=\"en\"");
+    insert_html_tag(name, "lang=\"en\"");
 
     /* Inserts new tag "head" into the html tag, without parameters (NULL):  
         <html lang=en>
-        <head>
-        </head>
+            <head>
+            </head>
         </html>
     */
     char *head_tag = "head";
-    insert_tag(head_tag, NULL);
+    insert_html_tag(head_tag, NULL);
 
-    /* Inserts new tag "title" into the head tag, without parameters (NULL):  
+    /* Inserts new tag "title" into the head tag, without parameters (NULL):
         <html lang=en>
-        <head>
-        <title>
-        </title>
-        </head>
+            <head>
+                <title>
+                </title>
+            </head>
         </html>
     */
-    insert_tag("title", NULL);
+    insert_html_tag("title", NULL);
 
-    /* Inserts text "Reginos receptai" into the title tag (the title of the page is now "Reginos receptai"): 
+    /* Inserts text "Reginos receptai" into the "title" tag (the title of the page is now "Reginos receptai"):
         <html lang=en>
-        <head>
-        <title>
-        Reginos receptai
-        </title>
-        </head>
+            <head>
+                <title>
+                    Reginos receptai
+                </title>
+            </head>
         </html>
     */
     char *title_name = "Reginos receptai";
-    insert_text(title_name);
+    insert_html_text(title_name);
 
-    /* Exits 2 tags (title and head tags), next code will be in the html tag only
+    /* Exits 2 tags ("title" and "head"), next code will be in the "html" tag only:
         <html lang=en>
-        <head>
-        <title>
-        Reginos receptai
-        </title>
-        </head>
-        (This is there the new tag will be inserted)
+            <head>
+                <title>
+                    Reginos receptai
+                </title>
+            </head>
+            (This is where the new tag will be inserted)
         </html>
     */
-    exit_field(2);
+    exit_html_field(2);
 
-    /* Inserts new tag "body" into the html tag, without parameters (NULL)
+    /* Inserts new tag "body" into the "html" tag, without parameters (NULL):
         <html lang=en>
-        <head>
-        <title>
-        Reginos receptai
-        </title>
-        </head>
-        <body>
-        </body>
+            <head>
+                <title>
+                    Reginos receptai
+                </title>
+            </head>
+            <body>
+            </body>
         </html>
     */
     char *name2 = "body";
-    insert_tag(name2, NULL);
+    insert_html_tag(name2, NULL);
 
-
-    printf("Tag inserted\n");
-
-    // Generates the output file (output.txt) containing the html code, which we created before
-    char *file_name = "output.txt";
+    // Generates the output file (output.html) containing the HTML code:
+    char *file_name = "output.html";
     generate_html_file(file_name);
-    printf("File printed\n");
 
-    // Deletes the linked list of html code and frees up the memory
-    delete_code();
+    // Deletes the HTML code and frees up the memory:
+    delete_html_code();
+
     return 0;
 }
 
