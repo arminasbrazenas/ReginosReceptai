@@ -1,5 +1,3 @@
-#define DEBUG
-
 #include "html-doubly-linked-list.h"
 
 int main()
