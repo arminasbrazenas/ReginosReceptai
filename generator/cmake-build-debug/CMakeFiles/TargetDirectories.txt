@@ -1,0 +1,3 @@
+C:/Users/jarau/Desktop/Reginos receptai/ReginosReceptai/generator/cmake-build-debug/CMakeFiles/generator.dir
+C:/Users/jarau/Desktop/Reginos receptai/ReginosReceptai/generator/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/jarau/Desktop/Reginos receptai/ReginosReceptai/generator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
