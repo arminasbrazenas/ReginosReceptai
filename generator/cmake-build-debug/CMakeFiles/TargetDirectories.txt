@@ -1,3 +1,0 @@
-C:/Users/Arminas/Desktop/Projects/ReginosReceptai/generator/cmake-build-debug/CMakeFiles/generator.dir
-C:/Users/Arminas/Desktop/Projects/ReginosReceptai/generator/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Arminas/Desktop/Projects/ReginosReceptai/generator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
