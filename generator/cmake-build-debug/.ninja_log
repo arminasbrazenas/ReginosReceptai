@@ -1,11 +1,4 @@
 # ninja log v5
-0	170	6928358583977456	build.ninja	554ae66a151e54dc
-3	127	6929831004622291	CMakeFiles/generator.dir/main.c.obj	91b3896c02384938
-8	129	6929831004659115	CMakeFiles/generator.dir/html-generator.c.obj	b6582c6026ab6db9
-129	233	6929831005642789	generator.exe	b6de549fdd4fc5c4
-3	92	6929832948362986	CMakeFiles/generator.dir/main.c.obj	91b3896c02384938
-93	209	6929832949378213	generator.exe	b6de549fdd4fc5c4
-4	97	6929835913576543	CMakeFiles/generator.dir/main.c.obj	91b3896c02384938
-98	178	6929835914335720	generator.exe	b6de549fdd4fc5c4
-2	307	6929836346836004	CMakeFiles/generator.dir/html-generator.c.obj	b6582c6026ab6db9
-308	554	6929836349243045	generator.exe	b6de549fdd4fc5c4
+5	98	6947243772225724	CMakeFiles/generator.dir/html-generator.c.obj	952639b0472bae6f
+1	100	6947243772235720	CMakeFiles/generator.dir/main.c.obj	85218de2e8d4f6a6
+100	208	6947243773295709	generator.exe	78fca5c6a482e67a
