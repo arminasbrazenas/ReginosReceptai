@@ -338,7 +338,7 @@ int main() {
             "        </div>\n"
             "      </div>\n"
             "      <img\n"
-            "        src=\"../assets/recipe_1_img.jpeg\"\n"
+            "        src=\"../assets/recipe_1_img.jpg\"\n"
             "        class=\"img-fluid recipe-img mb-3\"\n"
             "        alt=\"\"\n"
             "      />\n"
