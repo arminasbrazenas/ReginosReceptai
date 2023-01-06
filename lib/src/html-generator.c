@@ -107,6 +107,7 @@ int insert_html_tag(char *tag, char *attributes)
 
         g_html_current = g_html_current->previous;
     }
+
     return 0;
 }
 
@@ -143,6 +144,7 @@ int insert_html_text(char *text)
         }
         g_html_start = line;
     }
+
     return 0;
 }
 
