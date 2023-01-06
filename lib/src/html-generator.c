@@ -52,8 +52,7 @@ int insert_html_tag(char *tag, char *attributes)
     {
         return EINVAL;
     }
-
-    size_t tag_length = 2 + strlen(tag);
+    size_t tag_length = 3 + strlen(tag);
     if (attributes != NULL)
     {
         tag_length += 1 + strlen(attributes);
@@ -74,7 +73,7 @@ int insert_html_tag(char *tag, char *attributes)
     }
     strcat(opening_tag, ">");
 
-    tag_length = 3 + strlen(tag);
+    tag_length = 4 + strlen(tag);
     char *closing_tag = calloc(tag_length, sizeof(char));
     if (closing_tag == NULL)
     {
@@ -108,7 +107,6 @@ int insert_html_tag(char *tag, char *attributes)
 
         g_html_current = g_html_current->previous;
     }
-
     return 0;
 }
 
@@ -121,8 +119,7 @@ int insert_html_text(char *text)
     {
         return EINVAL;
     }
-
-    char *text_buffer = malloc(sizeof(char) * strlen(text));
+    char *text_buffer = malloc(sizeof(char) * (strlen(text) + 1));
     if (text_buffer == NULL)
     {
         return ENOMEM;
@@ -146,7 +143,6 @@ int insert_html_text(char *text)
         }
         g_html_start = line;
     }
-
     return 0;
 }
 
