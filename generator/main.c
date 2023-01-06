@@ -6,20 +6,15 @@
 
 void insert_html_tag_and_exit(char *tag, char *attributes);
 void insert_html_tag_with_text(char *tag, char *attributes, char *text);
-void add_css();
 void insert_boilerplate();
 void insert_navbar();
-void insert_main_page();
+void generate_css();
+void generate_main_page();
 void insert_recipe_card(const char *title, int rating/*, const char *image_address*/);
 
 int main() {
-    add_css();
-    generate_html_file("styles.css");
-    delete_html_code();
-
-    insert_main_page();
-    generate_html_file("index.html");
-    delete_html_code();
+    generate_css();
+    generate_main_page();
 
     return 0;
 
@@ -987,7 +982,7 @@ void insert_html_tag_with_text(char *tag, char *attributes, char *text)
     exit_html_field(1);
 }
 
-void add_css()
+void generate_css()
 {
     insert_html_text(
             "@import url(\"https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans&display=swap\");"
@@ -1082,6 +1077,8 @@ void add_css()
                 "color: inherit;"
             "}"
     );
+    generate_html_file("styles.css");
+    delete_html_code();
 }
 
 void insert_boilerplate()
@@ -1119,7 +1116,7 @@ void insert_navbar()
     exit_html_field(5);
 }
 
-void insert_main_page()
+void generate_main_page()
 {
     insert_boilerplate();
     insert_navbar();
@@ -1140,4 +1137,6 @@ void insert_main_page()
     insert_recipe_card("Lašišos kaulų sriuba iš vietinės aludės", 3);
     insert_recipe_card("Pica su kumpiu ir sūriu iš maximos", 3);
     insert_recipe_card("Proteino bomba", 5);
+    generate_html_file("index.html");
+    delete_html_code();
 }
