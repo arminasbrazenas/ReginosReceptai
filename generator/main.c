@@ -4,207 +4,24 @@
 #include <string.h>
 #include <stdlib.h>
 
+void insert_html_tag_and_exit(char *tag, char *attributes);
+void insert_html_tag_with_text(char *tag, char *attributes, char *text);
+void add_css();
+void insert_boilerplate();
+void insert_navbar();
+void insert_main_page();
 void insert_recipe_card(const char *title, int rating/*, const char *image_address*/);
 
 int main() {
-    insert_html_text("<!DOCTYPE html>");
-    insert_html_tag("html", "lang=\"en\"");
-    insert_html_tag("head", NULL);
-    insert_html_text("    <meta charset=\"utf-8\" />\n"
-                     "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n"
-                     "    <link\n"
-                     "      href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css\"\n"
-                     "      rel=\"stylesheet\"\n"
-                     "    />\n"
-                     "    <link\n"
-                     "      href=\"https://getbootstrap.com/docs/5.2/assets/css/docs.css\"\n"
-                     "      rel=\"stylesheet\"\n"
-                     "    />\n"
-    "    <link href=\"styles.css\" rel=\"stylesheet\" />\n"
-    "    <title>Reginos Receptai</title>\n"
-    "    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js\"></script>\n"
-    "    <link\n"
-    "      rel=\"stylesheet\"\n"
-    "      href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\"\n"
-    "    />");
-    exit_html_field(1);
-    insert_html_tag("body", "class=\"pb-4\"");
-    insert_html_text("    <!-- Navbar -->\n"
-    "    <nav class=\"navbar navbar-expand-lg navbar-light mb-3\">\n"
-    "      <div class=\"container-md px-3\">\n"
-    "        <a class=\"navbar-brand\" href=\"./index.html\">Reginos Receptai</a>\n"
-    "        <button\n"
-    "          class=\"navbar-toggler\"\n"
-    "          type=\"button\"\n"
-    "          data-bs-toggle=\"collapse\"\n"
-    "          data-bs-target=\"#navbarSupportedContent\"\n"
-    "          aria-controls=\"navbarSupportedContent\"\n"
-    "          aria-expanded=\"false\"\n"
-    "          aria-label=\"Toggle navigation\"\n"
-    "        >\n"
-    "          <span class=\"navbar-toggler-icon\"></span>\n"
-    "        </button>\n"
-    "        <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n"
-    "          <ul class=\"navbar-nav ms-auto\">\n"
-    "            <li class=\"nav-item\">\n"
-    "              <a class=\"nav-link\" href=\"./index.html\">Receptai</a>\n"
-    "            </li>\n"
-    "            <li class=\"nav-item\">\n"
-    "              <a class=\"nav-link\" href=\"./apie.html\">Apie mus</a>\n"
-    "            </li>\n"
-    "          </ul>\n"
-    "        </div>\n"
-    "      </div>\n"
-    "    </nav>\n"
-    "\n"
-    "    <!-- Page content -->\n"
-    "    <div class=\"container-md px-3\">\n"
-    "      <div\n"
-    "        class=\"page-header d-flex flex-wrap mb-2 justify-content-between align-items-center\"\n"
-    "      >\n"
-    "        <h2 class=\"h5 mb-0 py-2\">Ką gaminam?</h2>\n"
-    "        <select\n"
-    "          class=\"form-select w-25 sort-select\"\n"
-    "          aria-label=\"Rūšiuoti receptus\"\n"
-    "        >\n"
-    "          <option value=\"0\" selected>Geriausiai įvertinti</option>\n"
-    "          <option value=\"1\">Prasčiausiai įvertinti</option>\n"
-    "          <option value=\"2\">Naujausi</option>\n"
-    "          <option value=\"3\">Seniausi</option>\n"
-    "        </select>\n"
-    "      </div>\n"
-    "      <div class=\"row row-cols-1 row-cols-md-3 g-4\">\n");
-    insert_recipe_card("Ryžiadešriai", 4);
-    insert_recipe_card("Pieniška agurkų sriuba", 3);
-    insert_recipe_card("Česnako skiltelės su klevų sirupu", 2);
-    insert_recipe_card("Bananais įdaryta vištiena", 3);
-    insert_recipe_card("Lašišos kaulų sriuba iš vietinės aludės", 3);
-    insert_recipe_card("Pica su kumpiu ir sūriu iš maximos", 3);
-    insert_recipe_card("Proteino bomba", 5);
-    insert_html_text(
-    "      </div>\n"
-    "    </div>");
+    add_css();
+    generate_html_file("styles.css");
+    delete_html_code();
 
+    insert_main_page();
     generate_html_file("index.html");
     delete_html_code();
 
-    insert_html_text(
-            "@import url(\"https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans&display=swap\");"
-            ""
-            ":root {"
-            "--primary-font: \"Merriweather\", serif;"
-            "--secondary-font: \"Open Sans\", sans-serif;"
-            "--primary-font-color: #514343;"
-            "--primary-font-color-hover: #a19a98;"
-            "--secondary-font-color: #3b2222;"
-            "--primary-background-color: #ede9e4;"
-            "--light-background-color: #f8f5f1;"
-            "--light-border: 1px solid #ebe1d6;"
-            "--font-weight-bold: 700;"
-            "}"
-            ""
-            "body {"
-            "font-family: var(--secondary-font);"
-            "color: var(--secondary-font-color);"
-            "}"
-            ""
-            ".navbar {"
-            "background-color: var(--primary-background-color);"
-            "color: var(--primary-font-color);"
-            "}"
-            ""
-            ".navbar-brand {"
-            "font-family: var(--primary-font);"
-            "color: inherit;"
-            "transition: color 200ms ease-in-out;"
-            "}"
-            ""
-            ".nav-link {"
-            "text-transform: uppercase;"
-            "color: inherit;"
-            "}"
-            ""
-            ".nav-link:hover,"
-            ".navbar-brand:hover {"
-            "color: var(--primary-font-color-hover);"
-            "}"
-            ""
-            ".page-header {"
-            "font-family: var(--primary-font);"
-            "color: var(--primary-font-color);"
-            "}"
-            ""
-            ".fa-star {"
-            "color: #514343;"
-            "}"
-            ""
-            ".checked {"
-            "color: #dfbb62;"
-            "}"
-            ""
-            ".card {"
-            "text-decoration: none;"
-            "color: inherit;"
-            "transition: opacity 200ms ease-in-out;"
-            "}"
-            ""
-            ".card:hover {"
-            "opacity: 0.8;"
-            "}"
-            ""
-            ".card-body {"
-            "background-color: var(--light-background-color);"
-            "border-bottom: var(--light-border);"
-            "}"
-            ""
-            ".card-title {"
-            "color: var(--primary-font-color);"
-            "font-family: var(--primary-font);"
-            "}"
-            ""
-            ".page-section {"
-            "font-family: var(--primary-font);"
-            "font-weight: var(--font-weight-bold);"
-            "color: var(--primary-font-color);"
-            "}"
-            ""
-            ".ingredient {"
-            "color: var(--secondary-font-color);"
-            "}"
-            ""
-            ".container-md {"
-            "max-width: 1220px;"
-            "}"
-            ""
-            ".card-img-top {"
-            "width: 100%;"
-            "height: 15vw;"
-            "min-height: 180px;"
-            "max-height: 300px;"
-            "object-fit: cover;"
-            "}"
-            ""
-            ".recipe-img {"
-            "max-height: 25vw;"
-            "min-height: 240px;"
-            "width: 100%;"
-            "object-fit: cover;"
-            "}"
-            ""
-            ".sort-select {"
-            "min-width: 240px;"
-            "color: var(--primary-font-color);"
-            "font-family: var(--secondary-font);"
-            "}"
-            ""
-            "option {"
-            "font-family: inherit;"
-            "color: inherit;"
-            "}"
-    );
-
-    generate_html_file("styles.css");
-    delete_html_code();
+    return 0;
 
     insert_html_text(
             "<!DOCTYPE html>\n"
@@ -1155,4 +972,172 @@ void insert_recipe_card(const char *title, int rating/*, const char *image_addre
         exit_html_field(1);
     }
     exit_html_field(4);
+}
+
+void insert_html_tag_and_exit(char *tag, char *attributes)
+{
+    insert_html_tag(tag, attributes);
+    exit_html_field(1);
+}
+
+void insert_html_tag_with_text(char *tag, char *attributes, char *text)
+{
+    insert_html_tag(tag, attributes);
+    insert_html_text(text);
+    exit_html_field(1);
+}
+
+void add_css()
+{
+    insert_html_text(
+            "@import url(\"https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans&display=swap\");"
+            ":root {"
+                "--primary-font: \"Merriweather\", serif;"
+                "--secondary-font: \"Open Sans\", sans-serif;"
+                "--primary-font-color: #514343;"
+                "--primary-font-color-hover: #a19a98;"
+                "--secondary-font-color: #3b2222;"
+                "--primary-background-color: #ede9e4;"
+                "--light-background-color: #f8f5f1;"
+                "--light-border: 1px solid #ebe1d6;"
+                "--font-weight-bold: 700;"
+            "}"
+            "body {"
+                "font-family: var(--secondary-font);"
+                "color: var(--secondary-font-color);"
+            "}"
+            ".navbar {"
+                "background-color: var(--primary-background-color);"
+                "color: var(--primary-font-color);"
+            "}"
+            ".navbar-brand {"
+                "font-family: var(--primary-font);"
+                "color: inherit;"
+                "transition: color 200ms ease-in-out;"
+            "}"
+            ".nav-link {"
+                "text-transform: uppercase;"
+                "color: inherit;"
+            "}"
+            ".nav-link:hover, .navbar-brand:hover {"
+                "color: var(--primary-font-color-hover);"
+            "}"
+            ".page-header {"
+                "font-family: var(--primary-font);"
+                "color: var(--primary-font-color);"
+            "}"
+            ".fa-star {"
+                "color: #514343;"
+            "}"
+            ".checked {"
+                "color: #dfbb62;"
+            "}"
+            ".card {"
+                "text-decoration: none;"
+                "color: inherit;"
+                "transition: opacity 200ms ease-in-out;"
+            "}"
+            ".card:hover {"
+                "opacity: 0.8;"
+            "}"
+            ".card-body {"
+                "background-color: var(--light-background-color);"
+                "border-bottom: var(--light-border);"
+            "}"
+            ".card-title {"
+                "color: var(--primary-font-color);"
+                "font-family: var(--primary-font);"
+            "}"
+            ".page-section {"
+                "font-family: var(--primary-font);"
+                "font-weight: var(--font-weight-bold);"
+                "color: var(--primary-font-color);"
+            "}"
+            ".ingredient {"
+                "color: var(--secondary-font-color);"
+            "}"
+            ".container-md {"
+                "max-width: 1220px;"
+            "}"
+            ".card-img-top {"
+                "width: 100%;"
+                "height: 15vw;"
+                "min-height: 180px;"
+                "max-height: 300px;"
+                "object-fit: cover;"
+            "}"
+            ".recipe-img {"
+                "max-height: 25vw;"
+                "min-height: 240px;"
+                "width: 100%;"
+                "object-fit: cover;"
+            "}"
+            ".sort-select {"
+                "min-width: 240px;"
+                "color: var(--primary-font-color);"
+                "font-family: var(--secondary-font);"
+            "}"
+            "option {"
+                "font-family: inherit;"
+                "color: inherit;"
+            "}"
+    );
+}
+
+void insert_boilerplate()
+{
+    insert_html_text("<!DOCTYPE html>");
+    insert_html_tag("html", "lang=\"en\"");
+    insert_html_tag("head", NULL);
+    insert_html_tag_and_exit("meta", "charset=\"utf-8\"");
+    insert_html_tag_and_exit("meta", "name=\"viewport\" content=\"width=device-width, initial-scale=1\"");
+    insert_html_tag_and_exit("link", "href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\"");
+    insert_html_tag_and_exit("link", "href=\"https://getbootstrap.com/docs/5.2/assets/css/docs.css\" rel=\"stylesheet\"");
+    insert_html_tag_and_exit("link", "href=\"styles.css\" rel=\"stylesheet\"");
+    insert_html_tag_with_text("title", NULL, "Reginos Receptai");
+    insert_html_tag_and_exit("script", "src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js\"");
+    insert_html_tag_and_exit("link", "rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\"");
+    exit_html_field(1);
+    insert_html_tag("body", "class=\"pb-4\"");
+}
+
+void insert_navbar()
+{
+    insert_html_tag("nav", "class=\"navbar navbar-expand-lg navbar-light mb-3\"");
+    insert_html_tag("div", "class=\"container-md px-3\"");
+    insert_html_tag_with_text("a", "class=\"navbar-brand\" href=\"./index.html\"", "Reginos Receptai");
+    insert_html_tag("button", "class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"");
+    insert_html_tag("span", "class=\"navbar-toggler-icon\"");
+    exit_html_field(2);
+    insert_html_tag("div", "class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\"");
+    insert_html_tag("ul", "class=\"navbar-nav ms-auto\"");
+    insert_html_tag("li", "class=\"nav-item\"");
+    insert_html_tag_with_text("a", "class=\"nav-link\" href=\"./index.html\"", "Receptai");
+    exit_html_field(1);
+    insert_html_tag("li", "class=\"nav-item\"");
+    insert_html_tag_with_text("a", "class=\"nav-link\" href=\"./apie.html\"", "Apie mus");
+    exit_html_field(5);
+}
+
+void insert_main_page()
+{
+    insert_boilerplate();
+    insert_navbar();
+    insert_html_tag("div", "class=\"container-md px-3\"");
+    insert_html_tag("div", "class=\"page-header d-flex flex-wrap mb-2 justify-content-between align-items-center\"");
+    insert_html_tag_with_text("h2", "class=\"h5 mb-0 py-2\"", "Ką gaminam?");
+    insert_html_tag("select", "class=\"form-select w-25 sort-select\" aria-label=\"Rūšiuoti receptus\"");
+    insert_html_tag_with_text("option", "value=\"0\" selected", "Geriausiai įvertinti");
+    insert_html_tag_with_text("option", "value=\"1\"", "Prasčiausiai įvertinti");
+    insert_html_tag_with_text("option", "value=\"2\"", "Naujausi");
+    insert_html_tag_with_text("option", "value=\"3\"", "Seniausi");
+    exit_html_field(2);
+    insert_html_tag("div", "class=\"row row-cols-1 row-cols-md-3 g-4\"");
+    insert_recipe_card("Ryžiadešriai", 4);
+    insert_recipe_card("Pieniška agurkų sriuba", 3);
+    insert_recipe_card("Česnako skiltelės su klevų sirupu", 2);
+    insert_recipe_card("Bananais įdaryta vištiena", 3);
+    insert_recipe_card("Lašišos kaulų sriuba iš vietinės aludės", 3);
+    insert_recipe_card("Pica su kumpiu ir sūriu iš maximos", 3);
+    insert_recipe_card("Proteino bomba", 5);
 }
