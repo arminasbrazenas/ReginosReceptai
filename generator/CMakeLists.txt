@@ -9,3 +9,6 @@ add_executable(generator main.c html-generator.c html-generator.h)
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/assets)
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/Receptu_tekstai $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/Receptu_tekstai)
