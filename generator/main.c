@@ -4,36 +4,36 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct {
-    // Auto-incrementing from 1.
-    unsigned id;
+char* getline(FILE *file);
 
-    // Recipes title. E.g. "Baton"
-    char *title;
-
-    // Recipes rating, max 5.
-    unsigned rating;
-
-    // Img file name in assets folder. E.g. "recipe_1_img.jpg"
-    char *img;
-
-    // Recipe description.
-    char *description;
-
-    // Recipe ingredients.
-    char **ingredients;
-} Recipe;
-
+void insert_instructions(char **text);
+void insert_ingredients(char **ingredients);
+void insert_image(const int image_nr);
+void insert_recipe_header(char *title, unsigned rating);
+void insert_recipe(const int image_nr, char *title, unsigned rating, char **text, char **ingredients);
+void generate_recipes(const int recipe_count, char ***recipe_titles, int **recipe_ratings);
 void insert_html_tag_and_exit(char *tag, char *attributes);
 void insert_html_tag_with_text(char *tag, char *attributes, char *text);
 void insert_boilerplate(char *cssPath);
 void insert_navbar();
-void insert_main_content();
+void insert_main_div_tag();
 void generate_css();
-void generate_main_page();
+void generate_main_page(const int recipe_count, char **recipe_titles, int *recipe_ratings);
 void insert_recipe_card(const char *title, int rating/*, const char *image_address*/);
+void get_recipe_content(char filename[], char **title, int *rating, char ***ingredients, char ***text);
 
-void insert_main_content()
+int main() {
+    generate_css();
+    char **recipe_titles = NULL;
+    int *recipe_ratings = NULL;
+    ///TODO: Insertable recipe count
+    generate_recipes(7, &recipe_titles, &recipe_ratings);
+    generate_main_page(7, recipe_titles, recipe_ratings);
+
+    return 0;
+}
+
+void insert_main_div_tag()
 {
     insert_html_tag("div", "class=\"container-md px-3\"");
 }
@@ -46,40 +46,147 @@ void insert_rating(unsigned rating)
     }
 }
 
+void insert_instructions(char **text)
+{
+    for(int i = 0; text[i] != NULL; ++i)
+    {
+        insert_html_tag_with_text("p", NULL, text[i]);
+    }
+}
+
+void insert_ingredients(char **ingredients)
+{
+    insert_html_tag_with_text("p", "class=\"page-section mb-2\"", "Ingredientai:");
+    insert_html_tag("ul", "class=\"list-group\"");
+    for(int i = 0; ingredients[i] != NULL; i++)
+    {
+        insert_html_tag("li", "class=\"list-group-item\"");
+        insert_html_tag_and_exit("input", "class=\"form-check-input me-1\" type=\"checkbox\"");
+        insert_html_tag_with_text("span", "class=\"ingredient\"", ingredients[i]);
+        exit_html_field(1);
+    }
+    exit_html_field(1);
+}
+
+void insert_image(const int image_nr)
+{
+    char image[80] = "<img\n src=\"../assets/recipe_";
+    char recipe_number_str[10] = {0};
+    itoa(image_nr, recipe_number_str, 10);
+    strcat(image, recipe_number_str);
+    strcat(image, "_img.jpg\"\nclass=\"card-img-top rounded-0\"\n/>");
+    insert_html_text(image);
+}
+
 void insert_recipe_header(char *title, unsigned rating)
 {
     insert_html_tag("div", "class=\"page-header d-flex flex-column flex-wrap mb-3\"");
     insert_html_tag_with_text("h2", "class=\"h2 mb-0 py-1\"", title);
     insert_html_tag("div", NULL);
     insert_rating(rating);
-    exit_html_field(1);
+    exit_html_field(2);
 }
 
-void insert_recipe(char *title, unsigned rating)
+void insert_recipe(const int image_nr, char *title, unsigned int rating, char **text, char **ingredients)
 {
     insert_boilerplate("../styles.css");
     insert_navbar();
 
-    insert_main_content();
+    insert_main_div_tag();
     insert_recipe_header(title, rating);
+    insert_image(image_nr);
+    insert_instructions(text);
+    insert_ingredients(ingredients);
 }
 
-void generate_recipes()
+void generate_recipes(const int recipe_count, char ***recipe_titles, int **recipe_ratings)
 {
     mkdir("receptai");
 
-    insert_recipe("Test", 4);
-    generate_html_file("receptai/1.html");
-    delete_html_code();
+    *recipe_titles = malloc(recipe_count * sizeof(char*));
+    *recipe_ratings = malloc(recipe_count * sizeof(int));
+
+    for(int i = 0; i < recipe_count; i++)
+    {
+        char *title = NULL;
+        int rating;
+        char **ingredients = NULL;
+        char **text = NULL;
+        char filename[40] = "Receptu_tekstai/Receptas_";
+        char recipe_number_str[10] = {0};
+        itoa(i + 1, recipe_number_str, 10);
+        strcat(filename, recipe_number_str);
+        strcat(filename , ".txt");
+
+        get_recipe_content(filename, &title, &rating, &ingredients, &text);
+        insert_recipe(i + 1, title, rating, text, ingredients);
+
+        char created_file_path[30] = "receptai/";
+        strcat(created_file_path, recipe_number_str);
+        strcat(created_file_path , ".html");
+        generate_html_file(created_file_path);
+        delete_html_code();
+
+        free(ingredients);
+        free(text);
+        (*recipe_titles)[i] = title;
+        (*recipe_ratings)[i] = rating;
+    }
 }
 
-int main() {
-    generate_css();
-    generate_main_page();
-    generate_recipes();
+void get_recipe_content(char filename[], char **title, int *rating, char ***ingredients, char ***text) {
+    *title = NULL;
+    *ingredients = NULL;
+    *text = NULL;
 
-    return 0;
+    FILE *ptr = fopen(filename, "r");
+    if(ptr == NULL) {
+        printf("Error: unable to open file '%s'\n", filename);
+        return;
+    }
+
+    int string_size = 0;
+    *title = getline(ptr);
+    while(getc(ptr) != ' ');    //skips a word before the rating
+
+    fscanf(ptr, "%d\n", rating);
+    while(getc(ptr) != '\n');    //skips a word before the ingredients
+
+    int count = -1;
+    do {
+        ++count;
+        *ingredients = realloc(*ingredients, (count + 1) * sizeof(char*));
+        if(*ingredients == NULL) {
+            printf("Error: unable to allocate memory for ingredients\n");
+            return;
+        }
+
+        (*ingredients)[count] = NULL;
+        string_size = 0;
+        (*ingredients)[count] = getline(ptr);
+
+    } while(strcmp((*ingredients)[count], "Gaminimas:") != 0);
+    (*ingredients)[count] = NULL;
+
+    count = -1;
+    do {
+        ++count;
+        *text = realloc(*text, (count + 1) * sizeof(char*));
+        if(*text == NULL) {
+            printf("Error: unable to allocate memory for text\n");
+            return;
+        }
+        (*text)[count] = NULL;
+
+        string_size = 0;
+        (*text)[count] = getline(ptr);
+    } while(!feof(ptr));
+    *text = realloc(*text, (count + 2) * sizeof(char*));
+    (*text)[count + 1] = NULL;
+
+    fclose(ptr);
 }
+
 
 void insert_recipe_card(const char *title, int rating/*, const char *image_address*/)
 {
@@ -258,11 +365,11 @@ void insert_navbar()
     exit_html_field(5);
 }
 
-void generate_main_page()
+void generate_main_page(const int recipe_count, char **recipe_titles, int *recipe_ratings)
 {
     insert_boilerplate(NULL);
     insert_navbar();
-    insert_main_content();
+    insert_main_div_tag();
     insert_html_tag("div", "class=\"page-header d-flex flex-wrap mb-2 justify-content-between align-items-center\"");
     insert_html_tag_with_text("h2", "class=\"h5 mb-0 py-2\"", "Ką gaminam?");
     insert_html_tag("select", "class=\"form-select w-25 sort-select\" aria-label=\"Rūšiuoti receptus\"");
@@ -272,13 +379,44 @@ void generate_main_page()
     insert_html_tag_with_text("option", "value=\"3\"", "Seniausi");
     exit_html_field(2);
     insert_html_tag("div", "class=\"row row-cols-1 row-cols-md-3 g-4\"");
-    insert_recipe_card("Ryžiadešriai", 4);
-    insert_recipe_card("Pieniška agurkų sriuba", 3);
-    insert_recipe_card("Česnako skiltelės su klevų sirupu", 2);
-    insert_recipe_card("Bananais įdaryta vištiena", 3);
-    insert_recipe_card("Lašišos kaulų sriuba iš vietinės aludės", 3);
-    insert_recipe_card("Pica su kumpiu ir sūriu iš maximos", 3);
-    insert_recipe_card("Proteino bomba", 5);
+    for(int i = 0; i < recipe_count; i++)
+    {
+        insert_recipe_card(recipe_titles[i], recipe_ratings[i]);
+    }
     generate_html_file("index.html");
     delete_html_code();
+}
+
+char* getline(FILE *file) {
+    if (file == NULL)
+        return NULL;
+
+    const unsigned short CHARS_PER_ALLOC = 32;
+    char* str = malloc(CHARS_PER_ALLOC * sizeof(*str));
+    if (str == NULL)
+        return NULL;
+
+    int ch;
+    size_t size = 0;
+    while ((ch = fgetc(file)) && ch != EOF && ch != '\n') {
+        str[size] = (char)ch;
+        ++size;
+
+        if (size % CHARS_PER_ALLOC == 0) {
+            str = realloc(str, (size + CHARS_PER_ALLOC) * sizeof(*str));
+            if (str == NULL)
+                return NULL;
+        }
+    }
+
+    if (ch == EOF && size == 0) {
+        free(str);
+        return NULL;
+    }
+
+    str[size] = '\0';
+    ++size;
+
+    str = realloc(str, sizeof(*str) * size);
+    return str;
 }
