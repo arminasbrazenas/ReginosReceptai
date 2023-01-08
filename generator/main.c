@@ -3,6 +3,9 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
+#include "css_header.h"
+
+#define EXTRA_CAPACITY 8
 
 char* getline(FILE *file);
 
@@ -240,103 +243,281 @@ void insert_html_tag_with_text(char *tag, char *attributes, char *text)
     exit_html_field(1);
 }
 
+// The function below creates the CSS stylesheet file.
+void renderCSS(CSS *css, FILE *stream){
+    for(int i=0; i<css->size; ++i){
+        fprintf(stream, "%s {\n", css->styles[i]->selector);
+        for(int j=0; j<css->styles[i]->size; ++j){
+            fprintf(stream, "  %s: %s;\n", css->styles[i]->keys[j], css->styles[i]->values[j]);
+        }
+        fprintf(stream, "}\n\n");
+    }
+}
+
+// The function below initializes an empty CSS array.
+void initCSS(CSS *css){
+    css->capacity = 0;
+    css->size = 0;
+    css->styles = NULL;
+}
+
+// The function below initializes developer's chosen style.
+void initStyle(Style *style, char *selector){
+    // Here the developer must indicate, how many properties will the current style contain.
+    style->size = 0;
+    style->capacity = 0;
+    style->keys = NULL;
+    style->values = NULL;
+    style->selector = selector;
+}
+
+// The function below adds the style to the entire CSS array, return 0 if success or 1 if error is encountered.
+int pushStyle(CSS *css, Style *style){
+    if(css == NULL || style == NULL) return 1;
+
+    if (css->size == css->capacity) {
+        css->styles = realloc(css->styles, css->size * sizeof(Style) + EXTRA_CAPACITY * sizeof(Style));
+        css->capacity += EXTRA_CAPACITY;
+    }
+
+    css->styles[css->size] = style;
+    ++css->size;
+
+    return 0;
+}
+
+// The function below adds a CSS property to the selector, also returns 0 if success or 1 if error is encountered.
+int addCSSProperty(Style *style, char *property, char *value){
+    if(property==NULL || value == NULL || style == NULL) return 1;
+
+    if (style->size == style->capacity) {
+
+        style->keys = realloc(style->keys, style->size * sizeof(char*) + EXTRA_CAPACITY * sizeof(char*));
+        style->values = realloc(style->values, style->size * sizeof(char*) + EXTRA_CAPACITY * sizeof(char*));
+        if(style == NULL) return 1;
+        style->capacity += EXTRA_CAPACITY;
+    }
+
+
+    style->keys[style->size] = property;
+    style->values[style->size] = value;
+    ++style->size;
+
+    return 0;
+}
+
+// The function below frees all CSS nodes and clears the memory.
+void freeCSS(CSS *css){
+    for(int i=0; i<css->size; ++i){
+        free(css->styles[i]->keys);
+        free(css->styles[i]->values);
+    }
+    free(css->styles);
+}
+
+
 void generate_css()
 {
-    insert_html_text(
-            "@import url(\"https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans&display=swap\");"
-            ":root {"
-                "--primary-font: \"Merriweather\", serif;"
-                "--secondary-font: \"Open Sans\", sans-serif;"
-                "--primary-font-color: #514343;"
-                "--primary-font-color-hover: #a19a98;"
-                "--secondary-font-color: #3b2222;"
-                "--primary-background-color: #ede9e4;"
-                "--light-background-color: #f8f5f1;"
-                "--light-border: 1px solid #ebe1d6;"
-                "--font-weight-bold: 700;"
-            "}"
-            "body {"
-                "font-family: var(--secondary-font);"
-                "color: var(--secondary-font-color);"
-            "}"
-            ".navbar {"
-                "background-color: var(--primary-background-color);"
-                "color: var(--primary-font-color);"
-            "}"
-            ".navbar-brand {"
-                "font-family: var(--primary-font);"
-                "color: inherit;"
-                "transition: color 200ms ease-in-out;"
-            "}"
-            ".nav-link {"
-                "text-transform: uppercase;"
-                "color: inherit;"
-            "}"
-            ".nav-link:hover, .navbar-brand:hover {"
-                "color: var(--primary-font-color-hover);"
-            "}"
-            ".page-header {"
-                "font-family: var(--primary-font);"
-                "color: var(--primary-font-color);"
-            "}"
-            ".fa-star {"
-                "color: #514343;"
-            "}"
-            ".checked {"
-                "color: #dfbb62;"
-            "}"
-            ".card {"
-                "text-decoration: none;"
-                "color: inherit;"
-                "transition: opacity 200ms ease-in-out;"
-            "}"
-            ".card:hover {"
-                "opacity: 0.8;"
-            "}"
-            ".card-body {"
-                "background-color: var(--light-background-color);"
-                "border-bottom: var(--light-border);"
-            "}"
-            ".card-title {"
-                "color: var(--primary-font-color);"
-                "font-family: var(--primary-font);"
-            "}"
-            ".page-section {"
-                "font-family: var(--primary-font);"
-                "font-weight: var(--font-weight-bold);"
-                "color: var(--primary-font-color);"
-            "}"
-            ".ingredient {"
-                "color: var(--secondary-font-color);"
-            "}"
-            ".container-md {"
-                "max-width: 1220px;"
-            "}"
-            ".card-img-top {"
-                "width: 100%;"
-                "height: 15vw;"
-                "min-height: 180px;"
-                "max-height: 300px;"
-                "object-fit: cover;"
-            "}"
-            ".recipe-img {"
-                "max-height: 25vw;"
-                "min-height: 240px;"
-                "width: 100%;"
-                "object-fit: cover;"
-            "}"
-            ".sort-select {"
-                "min-width: 240px;"
-                "color: var(--primary-font-color);"
-                "font-family: var(--secondary-font);"
-            "}"
-            "option {"
-                "font-family: inherit;"
-                "color: inherit;"
-            "}"
-    );
-    generate_html_file("styles.css");
-    delete_html_code();
+    CSS styles;
+    initCSS(&styles);
+
+
+    Style root;
+    initStyle(&root, "@import url(\"https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=Open+Sans&display=swap\");\n\n:root");
+
+    addCSSProperty(&root, "--primary-font", "\"Merriweather\", serif");
+    addCSSProperty(&root, "--secondary-font", "\"Open Sans\", sans-serif");
+    addCSSProperty(&root, "--primary-font-color", "#514343");
+    addCSSProperty(&root, "--primary-font-color-hover", "#a19a98");
+    addCSSProperty(&root, "--secondary-font-color", "#3b2222");
+    addCSSProperty(&root, "--primary-background-color", "#ede9e4");
+    addCSSProperty(&root, "--light-background-color", "#f8f5f1");
+    addCSSProperty(&root, "--light-border", "1px solid #ebe1d6");
+    addCSSProperty(&root, "--font-weight-bold", "700");
+
+    pushStyle(&styles, &root);
+
+
+    Style body;
+    initStyle(&body, "body");
+
+    addCSSProperty(&body, "font-family", "var(--secondary-font)");
+    addCSSProperty(&body, "color", "var(--secondary-font-color)");
+
+    pushStyle(&styles, &body);
+
+
+    Style navBar;
+    initStyle(&navBar, ".navbar");
+
+    addCSSProperty(&navBar, "background-color", "var(--primary-background-color)");
+    addCSSProperty(&navBar, "color", "var(--primary-font-color)");
+
+    pushStyle(&styles, &navBar);
+
+
+    Style navBarBrand;
+    initStyle(&navBarBrand, ".navbar-brand");
+
+    addCSSProperty(&navBarBrand, "font-family", "var(--primary-font)");
+    addCSSProperty(&navBarBrand, "color", "inherit");
+    addCSSProperty(&navBarBrand, "transition", "color 200ms ease-in-out");
+
+    pushStyle(&styles, &navBarBrand);
+
+
+    Style navLink;
+    initStyle(&navLink, ".nav-link");
+
+    addCSSProperty(&navLink, "text-transform", "uppercase");
+    addCSSProperty(&navLink, "color", "inherit");
+
+    pushStyle(&styles, &navLink);
+
+
+    Style navLinkHover;
+    initStyle(&navLinkHover, ".nav-link:hover,\n.navbar-brand:hover");
+
+    addCSSProperty(&navLinkHover, "color", "var(--primary-font-color-hover)");
+
+    pushStyle(&styles, &navLinkHover);
+    
+
+    Style pageHeader;
+    initStyle(&pageHeader, ".page-header");
+
+    addCSSProperty(&pageHeader, "font-family", "var(--primary-font)");
+    addCSSProperty(&pageHeader, "color", "var(--primary-font-color)");
+
+    pushStyle(&styles, &pageHeader);
+
+
+    Style faStar;
+    initStyle(&faStar, ".fa-star");
+
+    addCSSProperty(&faStar, "color", "#514343");
+
+    pushStyle(&styles, &faStar);
+
+
+    Style checked;
+    initStyle(&checked, ".checked");
+
+    addCSSProperty(&checked, "color", "#dfbb62");
+
+    pushStyle(&styles, &checked);
+
+
+    Style card;
+    initStyle(&card, ".card");
+
+    addCSSProperty(&card, "text-decoration", "none");
+    addCSSProperty(&card, "color", "inherit");
+    addCSSProperty(&card, "transition", "opacity 200ms ease-in-out");
+
+    pushStyle(&styles, &card);
+
+
+    Style cardHover;
+    initStyle(&cardHover, ".card:hover");
+
+    addCSSProperty(&cardHover, "opacity", "0.8");
+
+    pushStyle(&styles, &cardHover);
+
+
+    Style cardBody;
+    initStyle(&cardBody, ".card-body");
+
+    addCSSProperty(&cardBody, "background-color", "var(--light-background-color)");
+    addCSSProperty(&cardBody, "border-bottom", "var(--light-border)");
+
+    pushStyle(&styles, &cardBody);
+
+
+    Style cardTitle;
+    initStyle(&cardTitle, ".card-title");
+
+    addCSSProperty(&cardTitle, "color", "var(--primary-font-color)");
+    addCSSProperty(&cardTitle, "font-family", "var(--primary-font)");
+
+    pushStyle(&styles, &cardTitle);
+
+
+    Style pageSection;
+    initStyle(&pageSection, ".page-section");
+
+    addCSSProperty(&pageSection, "font-family", "var(--primary-font)");
+    addCSSProperty(&pageSection, "font-weight", "var(--font-weight-bold)");
+    addCSSProperty(&pageSection, "color", "var(--primary-font-color)");
+
+    pushStyle(&styles, &pageSection);
+
+
+    Style ingredient;
+    initStyle(&ingredient, ".ingredient");
+
+    addCSSProperty(&ingredient, "color", "var(--secondary-font-color)");
+
+    pushStyle(&styles, &ingredient);
+
+
+    Style container;
+    initStyle(&container, ".container-md");
+
+    addCSSProperty(&container, "max-width", "1220px");
+
+    pushStyle(&styles, &container);
+
+
+    Style cardImg;
+    initStyle(&cardImg, ".card-img-top");
+
+    addCSSProperty(&cardImg, "width", "100%");
+    addCSSProperty(&cardImg, "height", "15vw");
+    addCSSProperty(&cardImg, "min-height", "180px");
+    addCSSProperty(&cardImg, "max-height", "300px");
+    addCSSProperty(&cardImg, "object-fit", "cover");
+
+    pushStyle(&styles, &cardImg);
+
+
+    Style recipeImg;
+    initStyle(&recipeImg, ".recipe-img");
+
+    addCSSProperty(&recipeImg, "max-height", "25vw");
+    addCSSProperty(&recipeImg, "min-height", "240px");
+    addCSSProperty(&recipeImg, "width", "100%");
+    addCSSProperty(&recipeImg, "object-fit", "cover");
+
+    pushStyle(&styles, &recipeImg);
+
+
+    Style sortSelect;
+    initStyle(&sortSelect, ".sort-select");
+
+    addCSSProperty(&sortSelect, "min-width", "240px");
+    addCSSProperty(&sortSelect, "color", "var(--primary-font-color)");
+    addCSSProperty(&sortSelect, "font-family", "var(--secondary-font)");
+
+    pushStyle(&styles, &sortSelect);
+
+
+    Style option;
+    initStyle(&option, "option");
+
+    addCSSProperty(&option, "font-family", "inherit");
+    addCSSProperty(&option, "color", "inherit");
+
+    pushStyle(&styles, &option);
+
+    FILE *fp;
+    fp = fopen("styles.css", "w+");
+    renderCSS(&styles, fp);
+    fclose(fp);
+
+    freeCSS(&styles);  
+    return 0;
 }
 
 void insert_boilerplate(char *root_dir_path)
