@@ -4,8 +4,9 @@ project(generator C)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/.out)
 
-add_executable(generator main.c html-generator.c html-generator.h)
+add_executable(generator main.c)
 target_link_libraries(generator ${CMAKE_SOURCE_DIR}/css_library.a)
+target_link_libraries(generator ${CMAKE_SOURCE_DIR}/libhtml-generator.a)
 
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
