@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include "css_header.h"
 
-#define EXTRA_CAPACITY 8
-
 char* getline(FILE *file);
 
 void insert_instructions(char **text);
@@ -243,79 +241,6 @@ void insert_html_tag_with_text(char *tag, char *attributes, char *text)
     exit_html_field(1);
 }
 
-// The function below creates the CSS stylesheet file.
-void renderCSS(CSS *css, FILE *stream){
-    for(int i=0; i<css->size; ++i){
-        fprintf(stream, "%s {\n", css->styles[i]->selector);
-        for(int j=0; j<css->styles[i]->size; ++j){
-            fprintf(stream, "  %s: %s;\n", css->styles[i]->keys[j], css->styles[i]->values[j]);
-        }
-        fprintf(stream, "}\n\n");
-    }
-}
-
-// The function below initializes an empty CSS array.
-void initCSS(CSS *css){
-    css->capacity = 0;
-    css->size = 0;
-    css->styles = NULL;
-}
-
-// The function below initializes developer's chosen style.
-void initStyle(Style *style, char *selector){
-    // Here the developer must indicate, how many properties will the current style contain.
-    style->size = 0;
-    style->capacity = 0;
-    style->keys = NULL;
-    style->values = NULL;
-    style->selector = selector;
-}
-
-// The function below adds the style to the entire CSS array, return 0 if success or 1 if error is encountered.
-int pushStyle(CSS *css, Style *style){
-    if(css == NULL || style == NULL) return 1;
-
-    if (css->size == css->capacity) {
-        css->styles = realloc(css->styles, css->size * sizeof(Style) + EXTRA_CAPACITY * sizeof(Style));
-        css->capacity += EXTRA_CAPACITY;
-    }
-
-    css->styles[css->size] = style;
-    ++css->size;
-
-    return 0;
-}
-
-// The function below adds a CSS property to the selector, also returns 0 if success or 1 if error is encountered.
-int addCSSProperty(Style *style, char *property, char *value){
-    if(property==NULL || value == NULL || style == NULL) return 1;
-
-    if (style->size == style->capacity) {
-
-        style->keys = realloc(style->keys, style->size * sizeof(char*) + EXTRA_CAPACITY * sizeof(char*));
-        style->values = realloc(style->values, style->size * sizeof(char*) + EXTRA_CAPACITY * sizeof(char*));
-        if(style == NULL) return 1;
-        style->capacity += EXTRA_CAPACITY;
-    }
-
-
-    style->keys[style->size] = property;
-    style->values[style->size] = value;
-    ++style->size;
-
-    return 0;
-}
-
-// The function below frees all CSS nodes and clears the memory.
-void freeCSS(CSS *css){
-    for(int i=0; i<css->size; ++i){
-        free(css->styles[i]->keys);
-        free(css->styles[i]->values);
-    }
-    free(css->styles);
-}
-
-
 void generate_css()
 {
     CSS styles;
@@ -517,7 +442,6 @@ void generate_css()
     fclose(fp);
 
     freeCSS(&styles);  
-    return 0;
 }
 
 void insert_boilerplate(char *root_dir_path)
