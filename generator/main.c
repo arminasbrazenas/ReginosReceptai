@@ -499,13 +499,7 @@ void generate_main_page(const int recipe_count, char **recipe_titles, int *recip
     insert_navbar(".");
     insert_main_div_tag();
     insert_html_tag("div", "class=\"page-header d-flex flex-wrap mb-2 justify-content-between align-items-center\"");
-    insert_html_tag_with_text("h2", "class=\"h5 mb-0 py-2\"", "Ką gaminam?");
-    insert_html_tag("select", "class=\"form-select w-25 sort-select\" aria-label=\"Rūšiuoti receptus\"");
-    insert_html_tag_with_text("option", "value=\"0\" selected", "Geriausiai įvertinti");
-    insert_html_tag_with_text("option", "value=\"1\"", "Prasčiausiai įvertinti");
-    insert_html_tag_with_text("option", "value=\"2\"", "Naujausi");
-    insert_html_tag_with_text("option", "value=\"3\"", "Seniausi");
-    exit_html_field(2);
+    insert_html_tag_with_text("h2", "class=\"h5 mb-2 py-2\"", "Ką gaminam?");
     insert_html_tag("div", "class=\"row row-cols-1 row-cols-md-3 g-4\"");
     for(int i = 0; i < recipe_count; i++)
     {
