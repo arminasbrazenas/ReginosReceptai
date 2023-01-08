@@ -14,11 +14,12 @@ void insert_recipe(const int image_nr, char *title, unsigned rating, char **text
 void generate_recipes(const int recipe_count, char ***recipe_titles, int **recipe_ratings);
 void insert_html_tag_and_exit(char *tag, char *attributes);
 void insert_html_tag_with_text(char *tag, char *attributes, char *text);
-void insert_boilerplate(char *cssPath);
-void insert_navbar();
+void insert_boilerplate(char *root_dir_path);
+void insert_navbar(char *root_dir_path);
 void insert_main_div_tag();
 void generate_css();
 void generate_main_page(const int recipe_count, char **recipe_titles, int *recipe_ratings);
+void generate_about_page();
 void insert_recipe_card(const char *title, int rating/*, const char *image_address*/);
 void get_recipe_content(char filename[], char **title, int *rating, char ***ingredients, char ***text);
 
@@ -29,8 +30,22 @@ int main() {
     ///TODO: Insertable recipe count
     generate_recipes(7, &recipe_titles, &recipe_ratings);
     generate_main_page(7, recipe_titles, recipe_ratings);
+    generate_about_page();
 
     return 0;
+}
+
+void generate_about_page()
+{
+    insert_boilerplate(".");
+    insert_navbar(".");
+    insert_main_div_tag();
+    insert_html_tag("div", "class=\"page-header d-flex flex-wrap mb-2 justify-content-between align-items-center\"");
+    insert_html_tag_with_text("h2", "class=\"h5 mb-0 py-2\"", "Apie mus");
+    exit_html_field(1);
+    insert_html_tag_with_text("p", NULL, "Mes nesame atsakingi už tai, kaip jausitės po valgio.");
+    generate_html_file("apie.html");
+    delete_html_code();
 }
 
 void insert_main_div_tag()
@@ -89,8 +104,8 @@ void insert_recipe_header(char *title, unsigned rating)
 
 void insert_recipe(const int image_nr, char *title, unsigned int rating, char **text, char **ingredients)
 {
-    insert_boilerplate("../styles.css");
-    insert_navbar();
+    insert_boilerplate("..");
+    insert_navbar("..");
 
     insert_main_div_tag();
     insert_recipe_header(title, rating);
@@ -324,7 +339,7 @@ void generate_css()
     delete_html_code();
 }
 
-void insert_boilerplate(char *cssPath)
+void insert_boilerplate(char *root_dir_path)
 {
     insert_html_text("<!DOCTYPE html>");
     insert_html_tag("html", "lang=\"en\"");
@@ -335,7 +350,7 @@ void insert_boilerplate(char *cssPath)
     insert_html_tag_and_exit("link", "href=\"https://getbootstrap.com/docs/5.2/assets/css/docs.css\" rel=\"stylesheet\"");
 
     char cssAttributes[256];
-    sprintf(cssAttributes, "href=\"%s\" rel=\"stylesheet\"", cssPath ? cssPath : "styles.css");
+    sprintf(cssAttributes, "href=\"%s/styles.css\" rel=\"stylesheet\"", root_dir_path ? root_dir_path : ".");
     insert_html_tag_and_exit("link", cssAttributes);
 
     insert_html_tag_with_text("title", NULL, "Reginos Receptai");
@@ -345,30 +360,38 @@ void insert_boilerplate(char *cssPath)
     insert_html_tag("body", "class=\"pb-4\"");
 }
 
-void insert_navbar()
+void insert_navbar(char *root_dir_path)
 {
     insert_html_tag("nav", "class=\"navbar navbar-expand-lg navbar-light mb-3\"");
     insert_html_tag("div", "class=\"container-md px-3\"");
-    insert_html_tag_with_text("a", "class=\"navbar-brand\" href=\"./index.html\"", "Reginos Receptai");
+
+    char title_link_attributes[256];
+    sprintf(title_link_attributes, "class=\"navbar-brand\" href=\"%s/index.html\"", root_dir_path ? root_dir_path : ".");
+    insert_html_tag_with_text("a", title_link_attributes, "Reginos Receptai");
+
     insert_html_tag("button", "class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"");
     insert_html_tag("span", "class=\"navbar-toggler-icon\"");
     exit_html_field(2);
     insert_html_tag("div", "class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\"");
     insert_html_tag("ul", "class=\"navbar-nav ms-auto\"");
 
-    // TODO: Fix linking from different directories
+    char index_link_attributes[256];
+    sprintf(index_link_attributes, "class=\"nav-link\" href=\"%s/index.html\"", root_dir_path ? root_dir_path : ".");
     insert_html_tag("li", "class=\"nav-item\"");
-    insert_html_tag_with_text("a", "class=\"nav-link\" href=\"./index.html\"", "Receptai");
+    insert_html_tag_with_text("a", index_link_attributes, "Receptai");
     exit_html_field(1);
+
+    char about_link_attributes[256];
+    sprintf(about_link_attributes, "class=\"nav-link\" href=\"%s/apie.html\"", root_dir_path ? root_dir_path : ".");
     insert_html_tag("li", "class=\"nav-item\"");
-    insert_html_tag_with_text("a", "class=\"nav-link\" href=\"./apie.html\"", "Apie mus");
+    insert_html_tag_with_text("a", about_link_attributes, "Apie mus");
     exit_html_field(5);
 }
 
 void generate_main_page(const int recipe_count, char **recipe_titles, int *recipe_ratings)
 {
-    insert_boilerplate(NULL);
-    insert_navbar();
+    insert_boilerplate(".");
+    insert_navbar(".");
     insert_main_div_tag();
     insert_html_tag("div", "class=\"page-header d-flex flex-wrap mb-2 justify-content-between align-items-center\"");
     insert_html_tag_with_text("h2", "class=\"h5 mb-0 py-2\"", "Ką gaminam?");
