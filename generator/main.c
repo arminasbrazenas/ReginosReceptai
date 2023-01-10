@@ -2,6 +2,7 @@
 #include "html-generator.h"
 #include <sys/stat.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include "css_header.h"
 
@@ -23,17 +24,48 @@ void generate_main_page(const int recipe_count, char **recipe_titles, int *recip
 void generate_about_page();
 void insert_recipe_card(const char *title, int rating/*, const char *image_address*/);
 void get_recipe_content(char filename[], char **title, int *rating, char ***ingredients, char ***text);
+int get_recipe_count(int argc, char **argv);
+int is_integer(char *string);
 
-int main() {
+int main(int argc, char **argv) {
     generate_css();
     char **recipe_titles = NULL;
     int *recipe_ratings = NULL;
-    ///TODO: Insertable recipe count
-    generate_recipes(7, &recipe_titles, &recipe_ratings);
-    generate_main_page(7, recipe_titles, recipe_ratings);
+    int recipe_count = get_recipe_count(argc, argv);
+    generate_recipes(recipe_count, &recipe_titles, &recipe_ratings);
+    generate_main_page(recipe_count, recipe_titles, recipe_ratings);
     generate_about_page();
 
     return 0;
+}
+
+int is_integer(char *string)
+{
+    for(int i = 0; string[i] != '\0'; i++)
+    {
+        if(!isdigit(string[i]))
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int get_recipe_count(int argc, char **argv)
+{
+    if(argc > 1 && is_integer(argv[1]))
+    {
+        return atoi(argv[1]);
+    }
+
+    char recipe_count[20];
+    do
+    {
+        printf("Number of recipes to include in the site:\n");
+        scanf("%19s", recipe_count);
+    } while(!is_integer(recipe_count) && (fflush(stdin), printf("Error: incorrect input. Please repeat the recipe count\n"), 1));
+
+    return atoi(recipe_count);
 }
 
 void generate_about_page()
@@ -86,7 +118,7 @@ void insert_ingredients(char **ingredients)
 
 void insert_image(const int image_nr)
 {
-    char image[80] = "<img\n src=\"../assets/recipe_";
+    char image[80] = "<img\n src=\"../Images/recipe_";
     char recipe_number_str[10] = {0};
     itoa(image_nr, recipe_number_str, 10);
     strcat(image, recipe_number_str);
@@ -215,7 +247,7 @@ void insert_recipe_card(const char *title, int rating/*, const char *image_addre
     strcat(parameters, recipe_number_str);
     strcat(parameters, ".html\"");
     insert_html_tag("a", parameters);
-    char image[80] = "<img\n src=\"./assets/recipe_";
+    char image[80] = "<img\n src=\"./Images/recipe_";
     strcat(image, recipe_number_str);
     strcat(image, "_img.jpg\"\nclass=\"card-img-top rounded-0\"\n/>");
     insert_html_text(image);
