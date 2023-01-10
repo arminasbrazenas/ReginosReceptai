@@ -10,7 +10,7 @@ target_link_libraries(generator ${CMAKE_SOURCE_DIR}/libhtml-generator.a)
 
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/assets)
+        ${CMAKE_SOURCE_DIR}/Images $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/Images)
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/Receptu_tekstai $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/Receptu_tekstai)
